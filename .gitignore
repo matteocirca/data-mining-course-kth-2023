@@ -1,1 +1,4 @@
 .DS_Store
+
+#Ignore everything from the .ipynb_checkpoints folder
+hw1/.ipynb_checkpoints/*
