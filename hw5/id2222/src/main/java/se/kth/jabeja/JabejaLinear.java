@@ -10,18 +10,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class Jabeja {
-  final static Logger logger = Logger.getLogger(Jabeja.class);
+public class JabejaLinear {
+  final static Logger logger = Logger.getLogger(JabejaLinear.class);
   private final Config config;
   private final HashMap<Integer/*id*/, Node/*neighbors*/> entireGraph;
   private final List<Integer> nodeIds;
   private int numberOfSwaps;
   private int round;
+
   private float T;
+  
   private boolean resultFileCreated = false;
 
   //-------------------------------------------------------------------
-  public Jabeja(HashMap<Integer, Node> graph, Config config) {
+  public JabejaLinear(HashMap<Integer, Node> graph, Config config) {
     this.entireGraph = graph;
     this.nodeIds = new ArrayList(entireGraph.keySet());
     this.round = 0;
@@ -32,7 +34,7 @@ public class Jabeja {
 
 
   //-------------------------------------------------------------------
-  public void startJabeja() throws IOException {
+  public void startJabejaLinear() throws IOException {
     for (round = 0; round < config.getRounds(); round++) {
       for (int id : entireGraph.keySet()) {
         sampleAndSwap(id);

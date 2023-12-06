@@ -58,7 +58,10 @@ public class Main {
      * @return
      */
     private void startJabeja(HashMap<Integer, Node> graph) throws IOException {
-        Jabeja host = new Jabeja(graph, config);
-        host.startJabeja();
+        // JabejaLinear host = new JabejaLinear(graph, config);
+        // host.startJabejaLinear();
+
+        JabejaExponential host = new JabejaExponential(graph, config);
+        host.startJabejaExponential();
     }
 }
