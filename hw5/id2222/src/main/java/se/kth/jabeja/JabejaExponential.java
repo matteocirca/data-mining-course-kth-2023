@@ -51,9 +51,6 @@ public class JabejaExponential {
       // reset temperature every T/delta rounds and wait for T/delta/2 rounds
       if(round % (int) (config.getTemperature() / config.getDelta()) == 0)
         T = config.getTemperature();
-      // reset temperature every T/delta rounds and wait for T/delta/2 rounds
-      // if(round % (int) (config.getTemperature() / config.getDelta()) == 0)
-      //   T = config.getTemperature();
       // reset temperature every T/delta rounds/2
       // if(round % (int) (config.getTemperature() / config.getDelta() / 2) == 0)
       //   T = config.getTemperature();
