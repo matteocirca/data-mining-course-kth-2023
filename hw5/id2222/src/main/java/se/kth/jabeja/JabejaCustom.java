@@ -10,8 +10,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class JabejaLinear {
-  final static Logger logger = Logger.getLogger(JabejaLinear.class);
+import static java.lang.Math.exp;
+import static java.lang.Math.pow;
+
+public class JabejaCustom {
+  final static Logger logger = Logger.getLogger(JabejaCustom.class);
   private final Config config;
   private final HashMap<Integer/*id*/, Node/*neighbors*/> entireGraph;
   private final List<Integer> nodeIds;
@@ -22,8 +25,10 @@ public class JabejaLinear {
   
   private boolean resultFileCreated = false;
 
+  private final Random randomGenerator = new Random();
+
   //-------------------------------------------------------------------
-  public JabejaLinear(HashMap<Integer, Node> graph, Config config) {
+  public JabejaCustom(HashMap<Integer, Node> graph, Config config) {
     this.entireGraph = graph;
     this.nodeIds = new ArrayList(entireGraph.keySet());
     this.round = 0;
@@ -34,7 +39,7 @@ public class JabejaLinear {
 
 
   //-------------------------------------------------------------------
-  public void startJabejaLinear() throws IOException {
+  public void startJabejaCustom() throws IOException {
     for (round = 0; round < config.getRounds(); round++) {
       for (int id : entireGraph.keySet()) {
         sampleAndSwap(id);
@@ -51,6 +56,20 @@ public class JabejaLinear {
       //   T = config.getTemperature();
       report();
     }
+  }
+
+  public Double acceptanceProbability(Double oldCost, Double newCost, float temperature){
+      // This formula is a form of the logistic function, often used in logistic regression and 
+      // neural networks to map any real-valued number into the range (0, 1), making it useful for 
+      // interpreting the output as a probability.
+      // Both the formulas used in the Exponential case and the one here
+      // return 0 when oldCost is way higher than newCost, and 1 when newCost is way higher than oldCost.
+      // The difference is that the Logistic function is smoother when stepping from 0 to 1
+      return newCost > oldCost ? 1 : 1 / (
+                1 + exp(
+                        -(newCost - oldCost) / temperature
+                )
+      );
   }
 
   /**
@@ -116,13 +135,13 @@ public class JabejaLinear {
 
       int d_pp = getDegree(nodep, nodepColor);
       int d_qq = getDegree(nodeq, nodeqColor);
-      int _old = d_pp + d_qq;
+      double _old = pow(d_pp + d_qq, config.getAlpha());
 
       int d_pq = getDegree(nodep, nodeqColor);
       int d_qp = getDegree(nodeq, nodepColor);
-      int _new = d_pq + d_qp;
+      double _new = pow(d_pq + d_qp, config.getAlpha());
 
-      if ((_new * T > _old) && (_new > highestBenefit)) {
+      if ((acceptanceProbability(_old, _new, T) > randomGenerator.nextDouble()) && (_new > highestBenefit)) {
         bestPartner = nodeq;
         highestBenefit = _new;
       }
